@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPU Întrebări și Răspunsuri</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .questions, .answers {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            height: 90vh;
+            overflow-y: auto;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15); /* Mehr Schatten */
+            border: none; /* Rand entfernt */
+        }
+
+        .questions .question-list {
+            /* Hier werden die Buttons platziert */
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            background: #0066cc;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #0052a3;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .answers {
+            background: #f5f5f5; /*  HINTERGRUNDFARBE BEHALTEN  */
+        }
+
+        .answers h3 {
+            color: #007bff; /* ÜBERSCHRIFTENFARBE BEHALTEN */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .questions, .answers {
+                height: auto;
+                max-height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="questions">
+            <input type="text" class="search-box" id="searchBox" placeholder="Caută întrebări..." onkeyup="searchQuestions()">
+            <div class="question-list" id="questionsList">
+                <!-- Întrebările vor fi adăugate prin JavaScript -->
+            </div>
+        </div>
+        <div class="answers" id="answerBox">
+            <p>Alegeți o întrebare pentru a vedea răspunsul...</p>
+        </div>
+    </div>
+
+    <script>
+        const qa_data = [
+            {
+  "questions_and_answers": [
+    {
+      "question": "Povestește-ne despre viața ta, despre hobby-urile tale?",
+      "answer": "Este într-o relație serioasă și nu are copii. Are un copil care se află în Spania cu mama lui. S-au despărțit. Din 2010 până în 2017 a fost în Spania. Este un tâmplar instruit. Este angajat la o companie care produce piese auto. În weekend lucrează la strung, creează desene, merge la plimbări și plimbări cu bicicleta și petrece timp cu iubita lui. Este în Germania din 2017."
+    },
+    {
+      "question": "Există un cerc permanent de prieteni?",
+      "answer": "Are un nou cerc de prieteni aici."
+    },
+    {
+      "question": "Descrieți delictul, ce s-a întâmplat în acea zi?",
+      "answer": "Periclitarea cu neglijență a traficului rutier în trafic în jurul orei 4:30 a.m., BAC la ora 5:30 a.m.: 2,04 per mil. A condus în mijlocul drumului și a virat vehiculul la dreapta și la stânga. A activat semnalizatoarele de viraj dreapta și stânga de mai multe ori, fără să se întoarcă. A depășit mașina persoanei vătămate cu un decalaj lateral extrem de mic și a tras înapoi pe banda dreaptă imediat în fața acesteia, astfel încât persoana vătămată a fost nevoită să inițieze frânarea de urgență."
+    },
+    {
+      "question": "De ce a băut atât de mult alcool în seara aceea?",
+      "answer": "Era cu cumnatul lui. Au băut împreună, era ziua de naștere. A consumat aproximativ 11 beri a câte 0,5 litri fiecare. În jurul orei 4:15 a spus că vrea să meargă acasă. Era frig. Drumul era gol și a decis să conducă aproximativ 2 km cu mașina. A început să bea în jurul orei 20:00 până în jurul orei 4 dimineața."
+    },
+    {
+      "question": "S-a simțit în stare să conducă?",
+      "answer": "Se simțea bine. Credea că încă mai poate conduce. Cu siguranță nu din perspectiva de astăzi."
+    },
+    {
+      "question": "Nu a putut să țină drept?",
+      "answer": "Înainte de a depăși, a tras la dreapta și la stânga."
+    },
+    {
+      "question": "Dacă intenționa să bea atât de mult?",
+      "answer": "Nu. Nu am avut controlul asupra consumului. A fost o sărbătoare."
+    },
+    {
+      "question": "Dacă a condus vreodată sub influența alcoolului fără a atrage atenția?",
+      "answer": "Da, a condus după 2-3 beri sau cu alcool rezidual, restalcool."
+    },
+    {
+      "question": "Care a fost comportamentul lui mediu de băut în timpul săptămânii și în weekend în anii dinaintea incidentului?",
+      "answer": "Când a fost în Spania, a băut 2-3 beri în weekend. Consumul a crescut în Germania și a început să bea și în timpul săptămânii. Au fost 2-3 beri si in weekend 5-6 beri. Maximul lui a fost de 12 beri, de 2-3 ori pe an. Mai ales la sărbători. Nu a băut în fiecare zi. Joi/Vineri 1-2 beri si apoi in weekend."
+    },
+    {
+      "question": "Cum s-a simțit după cantitatea maximă?",
+      "answer": "Nu e bine să bei atât de mult alcool."
+    },
+    {
+      "question": "Cum s-a simțit pentru el?",
+      "answer": "Când a băut alcool, era fericit. Uitase celelalte griji, problemele. Bineînțeles, lucrurile au fost rele și pentru el."
+    },
+    {
+      "question": "Dacă a avut experiențe negative în legătură cu consumul anterior de alcool?",
+      "answer": "Nu. Nu a avut probleme."
+    },
+    {
+      "question": "A observat că bea mai mult?",
+      "answer": "Da, observase asta, dar nu-i dăduse nicio atenție."
+    },
+    {
+      "question": "Dacă au existat comentarii critice din partea altora despre consumul lui de alcool?",
+      "answer": "Da, i-au spus mama și mama lui. Nu a dat atenție la asta."
+    },
+    {
+      "question": "Au fost rupturi de film?",
+      "answer": "Da, de 2-3 ori daca s-au atins cantitatile maxime. A doua zi nu-și amintea totul."
+    },
+    {
+      "question": "Cum se uită acum la comportamentul său de băut de atunci?",
+      "answer": "Problematic, numărul 8 pe scală."
+    },
+    {
+      "question": "Când a apărut decizia de a se opri?",
+      "answer": "După ce poliția l-a luat, a băut foarte puțin pentru prima dată. Pe 31 decembrie 2021, a decis să renunțe complet la alcool."
+    },
+    {
+      "question": "De ce?",
+      "answer": "S-a gândit la viitorul său, la familie și la societate."
+    },
+    {
+      "question": "De ce a băut alcool?",
+      "answer": "Când era stresat din cauza lipsei de apartenență. Voia să aparțină unui grup și nu putea spune nu sau refuza. Despărțirea, venirea în Germania, moartea tatălui său, stresul. Toate adunate. Nu știa limba. Cu alcool a uitat de el, a fost acolo pe moment și nu s-a gândit la nimic altceva. Totul era ok în Spania, avea cercul de prieteni. Apoi despărțirea de iubita lui, cu care are un băiat de 7 ani. Era singur și a venit în Germania la muncă."
+    },
+    {
+      "question": "Care au fost motivele consumului excesiv de alcool?",
+      "answer": "A venit încetul cu încetul. A devenit din ce în ce mai mult."
+    },
+    {
+      "question": "Ce a fost atât de grozav la grup?",
+      "answer": "Au fost și români pe care i-a găsit. Consumul de alcool a crescut încet, fără ca el să înțeleagă cu adevărat."
+    },
+    {
+      "question": "De ce motivele care au dus la consum pe atunci nu mai sunt eficiente acum?",
+      "answer": "Are o viață nouă, are o nouă iubită, are un nou loc de muncă și noi colegi. Are mai mult timp pentru hobby-urile lui. Își găsește pacea acolo. Are mai mult contact cu băiatul său și vorbește cu el mai des. Când este stresat, vorbește cu familia și vorbește mai deschis. Nu, nu a vorbit atât de deschis despre dificultățile sale înainte. Lucrurile sunt mai frumoase acum și se simte eliberat. El este mai deschis. El a trecut de separare."
+    },
+    {
+      "question": "Cum ați ajuns la abstinență?",
+      "answer": "Nu s-a întâmplat atât de brusc."
+    },
+    {
+      "question": "Cum au reacționat prietenii tăi la asta?",
+      "answer": "S-au întors de la el, dar și el. Cu cumnatul lui bea doar când erau petreceri. Nu mai merge la astfel de petreceri. Nu-l mai atrage."
+    },
+    {
+      "question": "De ce a ales abstinența?",
+      "answer": "Din cauza MPU, a sănătății, a viitorului și a familiei."
+    },
+    {
+      "question": "Care este motivația pentru a rămâne abstinent?",
+      "answer": "Nu este o dorință, ci o decizie pe care a luat-o. El vrea să i se acorde mai multă atenție de către societate."
+    },
+    {
+      "question": "Ce ar vorbi împotriva consumului de alcool pentru el? -> Posibilitate de băut controlat?",
+      "answer": "Nu mai bea nimic. Nimeni nu poate spune 100% sigur. Îi face plăcere să trăiască abstinent."
+    },
+    {
+      "question": "Ce îi place la asta?",
+      "answer": "Are mai mult timp liber, este mai concentrat pe hobby-urile lui, cu prietenii și colegii. Mai sunt și altele. E mai relaxat, are mai mulți bani."
+    },
+    {
+      "question": "Cine știe?",
+      "answer": "A învățat să spună nu. Ei știu asta."
+    },
+    {
+      "question": "În ce măsură l-a ajutat măsura?",
+      "answer": "Au vorbit despre incident. Că alcoolul era un lucru al creierului lui. Ce pericol era în trafic, practic o bombă. A învățat ce este toleranța."
+    },
+    {
+      "question": "Dacă vrea să mențină abstinența?",
+      "answer": "Da."
+    },
+    {
+      "question": "Ce ar putea pune în pericol abstinența?",
+      "answer": "O criză de viață, moartea unei rude, pierderea unui loc de muncă sau o boală gravă pot fi periculoase. Ar trebui să-și reîntâlnească vechii prieteni? S-ar putea să fie încurajat să bea la petreceri. Apoi spune nu și pleacă."
+    },
+    {
+      "question": "De ce ar putea face asta acum?",
+      "answer": "Nu s-a gândit niciodată că va deveni o problemă înainte. Acum, are hobby-urile lui, vorbește mai deschis despre dificultățile sale, iar familia îl susține. Acum își petrece timpul petrecut bând cu prietenii săi, cu hobby-urile sale. Se plimbă cu bicicleta. Își cunoaște motivele. Dorința de a aparține la ceva, despărțirea."
+    },
+    {
+      "question": "Motive pentru care ar trebui să urmați regulile?",
+      "answer": "A încălcat adesea regulile de circulație și îi pare rău pentru asta. Din cauza alcoolului. Altfel a respectat regulile."
+    },
+    {
+      "question": "Crede că este important ca regulile există?",
+      "answer": "Regulile se aplică tuturor oamenilor. Pentru o societate civilizată avem nevoie de reguli și de acum înainte vrea să le respecte. Pe atunci, era din cauza alcoolului. Altfel nu ar fi făcut-o."
+    },
+    {
+      "question": "Cum ar descrie el comportamentul său anterior de condus?",
+      "answer": "Conducand sub influența alcoolului. Am pus oamenii în pericol și nu eram asigurat dacă se întâmpla ceva. Ar fi trebuit să plătesc pentru tot. Am fost norocos că nu s-a întâmplat nimic."
+    },
+    {
+      "question": "Ce părere are acum despre comportamentul lui la volan?",
+      "answer": "Ar fi vrut să nu se fi întâmplat asta. A fost un dezastru."
+    },
+    {
+      "question": "Cum vrea în mod special să evite încălcările legii rutiere în viitor?",
+      "answer": "Îi place viața pe care o duce acum. El are grijă de hobby-urile lui. Rămân abstinent și nu mă întorc la alcool. Căutați ajutor."
+    },
+    {
+      "question": "Ce anume plănuieste să facă atunci când participa la traficul rutier?",
+      "answer": "El vrea să respecte regulile. Regulile se aplică tuturor și el vrea să le respecte. Respect limita de viteză și nu conduc sub influența alcoolului."
+    },
+    {
+      "question": "Ce este important pentru el pentru viitor?",
+      "answer": "Vrea să meargă la muncă și să-și urmeze hobby-urile. Să fac ceva cu prietena mea."
+    },
+    {
+      "question": "Ceva de adăugat?",
+      "answer": "MPU mi-a schimbat viața."
+    },
+    {
+      "question": "Cum și cât de mult alcool ați consumat?",
+      "answer": "Discuție cu medicul. Abstinenta totala de la alcool din Anul Nou 2022. Consumul a 5,5 litri de bere de la 20:00 la 4:15. Conduceți imediat după aceea. Consumul de alcool a crescut constant. Din 2018 încoace, clientul a băut de 3-4 ori pe săptămână minim 0,5 litri de bere și maxim 6 litri de bere. Cantitatea maximă de băut a fost atinsă de 2-3 ori pe an. În medie, clientul a băut 3,5 - 4 litri de bere pe ocazie. Nu s-a băut băutură alcoolică. În funcție de ocazie, pentru prăjire s-a consumat 0,11 vin spumant. A fost păstrat așa până când a devenit vizibil. Clientul și-a redus consumul de alcool la 0,5-1 litru de bere la ocazii speciale, de două ori mai mult în total. Clientul este abstinent de la 1 ianuarie 2022."
+    }
+  ]
+}
+        ];
+
+        function createButtons() {
+    const questionsList = document.getElementById('questionsList');
+    questionsList.innerHTML = '';
+    qa_data[0].questions_and_answers.forEach((item) => {
+        const button = document.createElement('button');
+        button.textContent = item.question;
+        button.onclick = () => showAnswer(item.question);
+        questionsList.appendChild(button);
+    });
+}
+             function showAnswer(question) {
+    const answer = qa_data[0].questions_and_answers.find(item => item.question === question).answer;
+    document.getElementById('answerBox').innerHTML = `
+        <h3>${question}</h3>
+        <p>${answer}</p>
+    `;
+}
+
+        function searchQuestions() {
+            const searchText = document.getElementById('searchBox').value.toLowerCase();
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+            
+            qa_data.forEach(item => {
+                if (item.question.toLowerCase().includes(searchText)) {
+                    const button = document.createElement('button');
+                    button.textContent = item.question;
+                    button.onclick = () => showAnswer(item.question);
+                    questionsList.appendChild(button);
+                }
+            });
+        }
+
+        // Construirea inițială a întrebărilor
+        createButtons();
+    </script>
+</body>
+</html>
